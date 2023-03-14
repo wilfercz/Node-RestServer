@@ -1,8 +1,9 @@
-import { response, request } from 'express';
+import { response, request, json } from 'express';
 import bcryptjs from 'bcryptjs';
 
 import { User } from '../models/usuario.js';
 import { generarJWT } from '../helpers/generar-jwt.js';
+import { googleVerify } from '../helpers/google-verify.js';
 
 const login = async(req=request, res=response) =>{
 
@@ -50,4 +51,53 @@ const login = async(req=request, res=response) =>{
 
 }
 
-export {login};
+const googleSingIn = async(req = request, res = response) =>{
+
+    const {id_token} = req.body;
+
+    try {
+
+        const {correo, nombre, img} = await googleVerify(id_token);
+
+        let usuario = await User.findOne({correo});
+
+        if(!usuario){
+            //Tengo que crearlo
+            const data = {
+                nombre,
+                correo,
+                password: ':P',
+                img,
+                google: true
+            };
+
+            usuario = new User(data);
+            await usuario.save();
+        }
+
+        //Si el usuario en BD
+        if(!usuario.estado){
+            return res.status(401).json({
+                msg:'Hable con el administrador, usuario bloqueado'
+            });
+        }
+
+        //Generar JWT
+        const token = await generarJWT(usuario.id);
+
+        res.json({
+           usuario,
+           token
+        });   
+
+    } catch(error) {
+        console.log(error);
+        res.status(400).json({
+            ok: false,
+            msg: 'El Token no se pudo verificar'
+        });
+    }
+
+}
+
+export {login, googleSingIn};
