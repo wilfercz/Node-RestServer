@@ -11,7 +11,7 @@ const esRolValido = async(rol = '') =>{
     if(!existeRol){
         throw new Error(`El rol ${rol} no existe en la BD`);
     }
-}
+};
 
 //Verificar si el correo existe
 const existeEmail = async (correo = '') =>{
@@ -20,7 +20,7 @@ const existeEmail = async (correo = '') =>{
     if ( existeEmail){
         throw new Error(`El correo ${correo} ya está en uso`);
     };
-}
+};
 
 //Verificar si usuario existe
 const existeUsuarioID = async (id = '') =>{
@@ -30,7 +30,7 @@ const existeUsuarioID = async (id = '') =>{
         throw new Error('El Usuario no Exite');
     };
 
-}
+};
 
 const existeCatg = async(id = '') =>{
 
@@ -40,7 +40,7 @@ const existeCatg = async(id = '') =>{
         throw new Error('La Categoria no Exite');
     };
 
-}
+};
 
 const existeProducto = async(id = '') =>{
 
@@ -50,7 +50,19 @@ const existeProducto = async(id = '') =>{
         throw new Error('El Producto no Exite');
     };
 
-}
+};
+
+const coleccionesPermitidas = (coleccion = '', colecciones = []) =>{
+
+    const incluida = colecciones.includes(coleccion);
+
+    if(!incluida){
+        throw new Error(`La coleccion ${coleccion} no es permitida, ${colecciones}`);
+    }
+
+    return true;
+
+};
 
 
-export {esRolValido, existeEmail, existeUsuarioID, existeCatg, existeProducto};
+export {esRolValido, existeEmail, existeUsuarioID, existeCatg, existeProducto, coleccionesPermitidas};

@@ -7,7 +7,8 @@ import { dbConnection } from '../db/config.js';
 import { routerCatg } from '../routes/categorias.js';
 import { routerProduct } from '../routes/productos.js';
 import { routerBusqueda } from '../routes/buscar.js';
-
+import { routerUpload } from '../routes/uploads.js';
+import fileUpload from 'express-fileupload';
 
 class Server {
 
@@ -20,7 +21,8 @@ class Server {
             categorias:'/api/categorias',
             users:     '/api/users',
             productos: '/api/productos',
-            busqueda: '/api/busqueda'
+            busqueda: '/api/busqueda',
+            upload: '/api/cargar'
         }
         
         //Conectar a base de datos
@@ -46,6 +48,13 @@ class Server {
 
         //Directorio Público
         this.app.use(express.static('public'));
+
+        //Carga de Archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes(){
@@ -54,6 +63,7 @@ class Server {
         this.app.use(this.paths.categorias, routerCatg);
         this.app.use(this.paths.productos, routerProduct);
         this.app.use(this.paths.busqueda, routerBusqueda);
+        this.app.use(this.paths.upload, routerUpload);
     }
 
     listen(){
