@@ -1,12 +1,12 @@
 import { response, request } from 'express';
 import bcryptjs from 'bcryptjs';
 
-import { User } from '../models/usuario.js';
+import { User } from '../models/index.js';
 
 const usersGet = async(req = request, res = response)=>{
 
     //const params = req.query;
-    const {limite = 5, desde = 0} = req.query
+    const {limite = 5, desde = 0} = req.query;
 
     const [total, users] = await Promise.all([
         User.countDocuments({ estado:true }),

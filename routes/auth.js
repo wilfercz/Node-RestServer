@@ -2,7 +2,7 @@ import {Router} from 'express';
 import { check } from 'express-validator';
 
 import { login, googleSingIn } from '../controllers/auth.js';
-import { validarCampos } from '../middlewares/validarCampos.js';
+import { validarCampos } from '../middlewares/index.js';
 
 const routerAuth = Router();
 

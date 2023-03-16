@@ -1,7 +1,7 @@
 import { response, request, json } from 'express';
 import bcryptjs from 'bcryptjs';
 
-import { User } from '../models/usuario.js';
+import { User } from '../models/index.js';
 import { generarJWT } from '../helpers/generar-jwt.js';
 import { googleVerify } from '../helpers/google-verify.js';
 
